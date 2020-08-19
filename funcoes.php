@@ -229,7 +229,11 @@
             if ($string == true || gettype($primeiraLinha[$i]) == 'NULL') {
                 $tipo[$i] = "VarChar";
             } else {
-                $tipo[$i] = "TinyInt";
+                if (strlen($primeiraLinha[$i]) > 2) {
+                    $tipo[$i] = "INT";
+                } else {
+                    $tipo[$i] = "TinyInt";
+                }
             }
 
             if ($primeiraLinha[$i] == 'true' || $primeiraLinha[$i] == 'false') {
@@ -237,6 +241,7 @@
             }
         }
 
+        print_r($tipo);
         return [$tipo, $tamanho];
     }
 
