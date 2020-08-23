@@ -4,7 +4,7 @@
     *
     * Esse arquivo contém todas as conexões com o BD
     * @author Pedro Serer
-    * @version 1.0.
+    * @version 1.0.1
     */
 
 
