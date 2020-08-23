@@ -136,8 +136,10 @@
             if ($string == true || gettype($primeiraLinha[$i]) == 'NULL') {
                 $tipo[$i] = "VarChar";
             } else {
-                if (strlen($primeiraLinha[$i]) > 2) {
+                if (strlen($primeiraLinha[$i]) > 2 && strlen($primeiraLinha[$i]) < 8) {
                     $tipo[$i] = "INT";
+                } else if (strlen($primeiraLinha[$i]) > 8) {
+                    $tipo[$i] = "BigInt";
                 } else {
                     $tipo[$i] = "TinyInt";
                 }
@@ -148,6 +150,7 @@
             }
         }
 
+        //print_r($tipo);
         return [$tipo, $tamanho];
     }
 
