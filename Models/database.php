@@ -7,7 +7,6 @@
     * @version 1.0.1
     */
 
-    error_reporting(0);
     //Configurações do banco de dados
     const SQL = [
        "HOST_BD" => "127.0.0.1",
