@@ -4,10 +4,11 @@
     *
     * Esse arquivo é o responsável pela execução do programa.
     * @author Pedro Serer
-    * @version 1.0.0
+    * @version 1.0.1
     */
 
     require "../Controllers/funcoes.php";
+    include("../Models" . BARRA . "database.php");
 
     //Apresenta erro se caso o primeiro parâmetro for omitido.
     if (!isset($argv[1])) {
@@ -54,8 +55,8 @@
             }
         }
 
-        list($sucesso1, $colunas) = cria_tabela(SQL, $cabCSV, $tabela, $tipo, $tamanho, $max, $verboso);
-        $sucesso2 = insere_dados(SQL, $linhasCSV, $tabela, $colunas, $tipo, $verboso);
+        list($sucesso1, $colunas) = cria_tabela(SQL, $cabCSV, $tabela, $tipo, $tamanho, $max, $verboso, $conexao);
+        $sucesso2 = insere_dados(SQL, $linhasCSV, $tabela, $colunas, $tipo, $verboso, $conexao);
 
         //Apresenta as mensagens de sucesso se tudo ocorrer bem.
         if ($sucesso1 == 1) {
@@ -70,3 +71,6 @@
         echo "\nArquivo nao existe!\n";
         $existe = false;
     }
+
+    //Fecha a conexão com o banco
+    mysqli_close($conexao);

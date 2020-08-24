@@ -10,10 +10,9 @@
 
     const BARRA = DIRECTORY_SEPARATOR;
 
-    $pathFiles = "../php-excel-reader-2.21";
-    require($pathFiles. BARRA . "excel_reader2.php");
-    require($pathFiles. BARRA . "SpreadsheetReader.php");
-    require("../Models" . BARRA . "database.php");
+    $pathFiles = "../php-excel-reader-2.21" . BARRA;
+    require($pathFiles . "excel_reader2.php");
+    require($pathFiles . "SpreadsheetReader.php");
 
     /**
     * Função que lê o arquivo Excel
@@ -172,12 +171,8 @@
     */
 
 
-    function cria_tabela ($sql, $cabCSV, $nome, $tipo, $tamanho, $max, $verboso = false)
+    function cria_tabela ($sql, $cabCSV, $nome, $tipo, $tamanho, $max, $verboso = false, $conexao)
     {
-        $conexao = mysqli_connect(
-            $sql["HOST_BD"], $sql["USER_BD"], $sql["PASSWORD_BD"], $sql["BANCO_DE_DADOS"]
-        );
-
         verifica_conexao($conexao);
 
         $query = "CREATE TABLE $nome" . " (\n";
@@ -205,7 +200,6 @@
 
         $sucesso = verifica_query($conexao, $query);
 
-        mysqli_close($conexao);
         return [$sucesso, $cabCSV];
     }
 
@@ -224,14 +218,10 @@
     */
 
 
-    function insere_dados ($sql, $linhasCSV, $nome, $colunas, $tipo, $verboso = false)
+    function insere_dados ($sql, $linhasCSV, $nome, $colunas, $tipo, $verboso = false, $conexao)
     {
         $maxColunas = count($colunas);
         $maxLinhas = count($linhasCSV);
-
-        $conexao = mysqli_connect(
-            $sql["HOST_BD"], $sql["USER_BD"], $sql["PASSWORD_BD"], $sql["BANCO_DE_DADOS"]
-        );
 
         verifica_conexao($conexao);
 
@@ -286,6 +276,5 @@
 
         $sucesso = verifica_query($conexao, $query);
 
-        mysqli_close($conexao);
         return $sucesso;
     }

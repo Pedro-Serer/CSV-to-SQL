@@ -7,7 +7,7 @@
     * @version 1.0.1
     */
 
-
+    error_reporting(0);
     //Configurações do banco de dados
     const SQL = [
        "HOST_BD" => "127.0.0.1",
@@ -15,6 +15,9 @@
        "PASSWORD_BD" => "",
        "BANCO_DE_DADOS" => "CSVTeste"
     ];
+
+    //Abre conexão com o banco
+    $conexao = mysqli_connect(SQL["HOST_BD"], SQL["USER_BD"], SQL["PASSWORD_BD"], SQL["BANCO_DE_DADOS"]);
 
     /**
     * Método que verifica se houve erros de conexão com o BD.
@@ -56,3 +59,5 @@
 
       return $sucesso;
     }
+
+    return $conexao;
