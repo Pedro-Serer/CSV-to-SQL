@@ -157,7 +157,7 @@
 
     /**
     * Método que cria o arquivo SQL.
-    * O resultado será salvo na pasta "Arquivos criados"
+    * O resultado será salvo na pasta "Arquivos-criados"
     * @param string $nome o nome de saída do arquivo.
     * @param string $conteudo o conteúdo do arquivo são
     * todas as querys.

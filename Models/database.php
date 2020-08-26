@@ -23,7 +23,7 @@
 
     //Abre conexão com o banco
     $conexao = mysqli_connect(SQL["HOST_BD"], SQL["USER_BD"], SQL["PASSWORD_BD"], SQL["BANCO_DE_DADOS"]);
->git commit -m "Mudança na arquitetura, remoção do modo verboso e adição de função que cria arquivos."
+
     /**
     * Método que verifica se houve erros de conexão com o BD.
     *
