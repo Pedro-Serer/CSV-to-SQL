@@ -165,7 +165,7 @@
 
     function cria_arquivo ($nome, $conteudo)
     {
-        $arquivo = fopen("../Arquivos criados" . BARRA . $nome . ".sql", "a+");
+        $arquivo = fopen("../Arquivos-criados" . BARRA . $nome . ".sql", "a+");
 
         if (!$arquivo) {
             die("\nErro ao criar o arquivo\n");
