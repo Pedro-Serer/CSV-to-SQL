@@ -5,7 +5,7 @@
     * Esse arquivo contém todas as funções que o programa
     * irá usar.
     * @author Pedro Serer
-    * @version 1.0.1
+    * @version 1.1.2
     */
 
     const BARRA = DIRECTORY_SEPARATOR;
@@ -82,7 +82,8 @@
     */
 
 
-    function formata_nome_tabela ($diretorio) {
+    function formata_nome_tabela ($diretorio)
+    {
         $deletar = [BARRA, ".csv"];
 
         $tabela = strrchr($diretorio, BARRA);
@@ -105,17 +106,6 @@
         echo $query;
         echo "--------------------------------------------------------------------------------\n";
     }
-
-    /**
-    * ---------------------------------------------------------------------------------------------
-    *                                     Funções de SQL
-    * ---------------------------------------------------------------------------------------------
-    */
-
-
-    /**
-    *     A linguagem usada por padrão é o MySQL.
-    */
 
     /**
     * Função que determina o tipo de dados das colunas
@@ -166,121 +156,21 @@
     }
 
     /**
-    * Função que cria a query e a tabela no banco de dados.
-    *
-    * @param array $sql configurações de login no banco de dados
-    * @param array $cabCSV contém os valores do cabeçalho do arquivo CSV.
-    * @param string $nome é o nome da tabela a ser criada. O valor contido
-    * no retorno da função formata_nome_tabela().
-    * @param array $tipo retorno da função tipo_de_dados() com os tipos de
-    * dados referentes a cada coluna da tabela.
-    * @param array $tamanho contém o retorno dos valores referentes a cada
-    * tipo de dados, respectivamente.
-    * @param int $max variável com a quantidade máxima de colunas que a
-    * tabela irá conter.
-    * @param bool $verboso verifica se deve mostrar a saída para o usuário.
-    * @return $sucesso se caso tudo ocorrer bem a função retorna 1.
+    * Método que cria o arquivo SQL.
+    * O resultado será salvo na pasta "Arquivos criados"
+    * @param string $nome o nome de saída do arquivo.
+    * @param string $conteudo o conteúdo do arquivo são
+    * todas as querys.
     */
 
-
-    function cria_tabela ($sql, $cabCSV, $nome, $tipo, $tamanho, $max, $verboso = false, $conexao)
+    function cria_arquivo ($nome, $conteudo)
     {
-        verifica_conexao($conexao);
+        $arquivo = fopen("../Arquivos criados" . BARRA . $nome . ".sql", "a+");
 
-        $query = "CREATE TABLE $nome" . " (\n";
-        $query .= "\t {$nome}_ID INT not null auto_increment,\n";
-
-        for ($i=0; $i < $max; $i++) {
-            $tamanho[$i] = $tamanho[$i] * 5;
-
-            if ($cabCSV[$i] == null) {
-                $cabCSV[$i] = "Adicional";
-            }
-
-            $query .= "\t" . ltrim($cabCSV[$i]) . " $tipo[$i]($tamanho[$i]) not null,\n";
+        if (!$arquivo) {
+            die("\nErro ao criar o arquivo\n");
         }
 
-        $query .= "\tPRIMARY KEY ({$nome}_ID)\n";
-        $query .= ");\n";
-
-        if ($verboso == true) {
-            verboso($query);
-        }
-
-        $sucesso = verifica_query($conexao, $query);
-
-        return [$sucesso, $cabCSV];
-    }
-
-    /**
-    * Função que a query e insere os dados no banco.
-    *
-    * @param array $sql configurações de login no banco de dados
-    * @param array $linhasCSV contém os valores de cada registro a ser inserido.
-    * @param string $nome é o nome da tabela a ser criada. O valor contido
-    * no retorno da função formata_nome_tabela().
-    * @param array $cabCSV contém os valores do cabeçalho do arquivo CSV.
-    * @param int $max variável com a quantidade máxima de colunas que a
-    * tabela irá conter.
-    * @param bool $verboso verifica se deve mostrar a saída para o usuário.
-    * @return $sucesso se caso tudo ocorrer bem a função retorna 1.
-    */
-
-
-    function insere_dados ($sql, $linhasCSV, $nome, $colunas, $tipo, $verboso = false, $conexao)
-    {
-        $maxColunas = count($colunas);
-        $maxLinhas = count($linhasCSV);
-
-        verifica_conexao($conexao);
-
-        $query = "INSERT INTO $nome " . "({$nome}_ID, ";
-
-        for ($i=0; $i < $maxColunas; $i++) {
-            if ($i < ($maxColunas - 1)) {
-                $query .= ltrim($colunas[$i]) . ",";
-            } else {
-                $query .= ltrim($colunas[$i]);
-            }
-        }
-
-        $query .= ") VALUES\n";
-
-        for ($i=0; $i < $maxLinhas; $i++) {
-
-            $k = 0;
-            $strings[$i] = explode(";", $linhasCSV[$i]);
-
-            for ($j=0; $j < count($strings[$i]); $j++) {
-
-                //Formata todo Varchar com aspas
-                if ($tipo[$k] == "VarChar") {
-                    $strings[$i][$j] = str_replace($strings[$i][$j], "'" . $strings[$i][$j] . "'", $strings[$i][$j]);
-                }
-
-                 //Impede dos campos ficarem nulos
-                if ($strings[$i][$j] == null) {
-                    $strings[$i][$j] = 0;
-                }
-
-                $k++;
-            }
-
-            $strings[$i] = implode(",", $strings[$i]);
-
-            //Última formatação da query
-            if ($i == $maxLinhas - 1) {
-                $query .= "\t (DEFAULT,". $strings[$i] . ")\n";
-            } else {
-                $query .= "\t (DEFAULT,". $strings[$i] . "),\n";
-            }
-        }
-
-        if ($verboso == true) {
-            verboso($query);
-        }
-
-        $sucesso = verifica_query($conexao, $query);
-
-        return $sucesso;
+        fwrite($arquivo, $conteudo);
+        fclose($arquivo);
     }
